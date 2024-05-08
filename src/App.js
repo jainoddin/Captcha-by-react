@@ -1,25 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{useState} from 'react'
+import { IoIosRefresh } from "react-icons/io";
+import "./App.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-function App() {
+
+const App = () => {
+  const randomString=Math.random().toString(36).slice(8);
+  const [captcha,setCaptcha]= useState(randomString)
+  const [text,setText]=useState("");
+  const [vaild,setVaild]=useState(false);
+
+  const refreshString =()=>{
+    setCaptcha(Math.random().toString(36).slice(8))
+  }
+
+  const matchCaptcha=(event)=>{
+    event.preventDefault();
+    if(text===captcha){
+      setVaild(false)
+      toast.success("SUSSESS")
+
+    }else{
+      setVaild(true)
+      toast.error("Please enter vaild Captcha...!")
+      setCaptcha(Math.random().toString(36).slice(8))
+
+      
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+     <ToastContainer />
+    <div><h1>validate Captcha</h1></div>
+    <div className='captcha'>
+      <h3>{captcha}</h3>
+      <button className='b' style={{background:"none", border:"none"}} onClick={()=>refreshString()}><IoIosRefresh style={{color:"white"}} /></button></div>
+      <form onSubmit={matchCaptcha}>
+    <div class="input-container">
+  <input type="text" id="name" name="name" onChange={(e)=>setText(e.target.value)} required/>
+  <label for="name">Enter Captcha</label><br></br><br></br>
+  <button type="submit" style={{ width: '10%', padding: '10px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Submit</button>
+</div>
+</form>
+    </>
+  )
 }
 
-export default App;
+export default App
